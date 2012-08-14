@@ -1,7 +1,9 @@
 #! /usr/bin/python
 
-import candlepinTest
+import logging
+import os
 import socket
+import CandlepinTest as cpt
 
 from optparse import OptionParser
 
@@ -14,14 +16,20 @@ def main():
     (options, args) = parser.parse_args()
 
     # ======== Setup ========
-    print 'Logging to: ' + options.log_file
+    fp = options.log_file[:options.log_file.rfind("/")]    
 
+    if not os.path.exists(fp):
+        os.makedirs(fp)
+    logging.basicConfig(filename=options.log_file, level=logging.DEBUG)
+    logging.info('Logging to: %s' % options.log_file)
 
     # ======== Run & Collect Data ========
     # 
     # Set #1: Candlepin Functionalities
-    candlepinTest.register(host=options.candlepin_hostname, username='admin', password='admin')
-    candlepinTest.subscribe()
+    logging.info('Starting candlepin test functionalities.')
+    cp = cpt.CandlepinTest(host=options.candlepin_hostname, server_prefix='katello/api', username='admin', password='admin')
+    cp.register(name='test_sytem', facts={'core': 1})
+    cp.subscribe()
     # Set #2: Pulp Functionalities
     # Set #3: Katello Functionalities
 
