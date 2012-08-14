@@ -3,6 +3,7 @@ import rhsm.connection as connection
 def register(host=None, 
              ssl_port=None, 
              cert_file=None, 
+             key_file=None,
              proxy_hostname=None, 
              proxy_port=None, 
              proxy_user=None, 
