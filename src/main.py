@@ -20,15 +20,17 @@ def main():
 
     if not os.path.exists(fp):
         os.makedirs(fp)
-    logging.basicConfig(filename=options.log_file, level=logging.DEBUG)
+    logging.basicConfig(filename=options.log_file, level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s')
     logging.info('Logging to: %s' % options.log_file)
 
     # ======== Run & Collect Data ========
     # 
     # Set #1: Candlepin Functionalities
     logging.info('Starting candlepin test functionalities.')
-    cp = cpt.CandlepinTest(host=options.candlepin_hostname, server_prefix='katello/api', username='admin', password='admin')
-    cp.register(name='test_sytem', facts={'core': 1})
+    cp = cpt.CandlepinTest(host=options.candlepin_hostname, ssl_port=443, server_prefix='/katello/api', username='admin', password='admin')
+    #cp.register(name='test_system', facts={'arch': 'x86_64', 'cpu': 'Intel'}, owner_key='foobar', environment_id='testenv')
+    cp.register(name='test_system', facts={'arch': 'x86_64', 'cpu': 'Intel'}, owner_key='foobar', environment_id='2')
+#curl -k -u admin:admin https://katello-test-el6.usersys.redhat.com/katello//api/organizations/foobar/environments|json_reformat
     cp.subscribe()
     # Set #2: Pulp Functionalities
     # Set #3: Katello Functionalities

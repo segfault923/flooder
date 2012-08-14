@@ -22,7 +22,8 @@ class CandlepinTest():
         self.cp = connection.UEPConnection(host=server_hostname,
                                            ssl_port=server_port,
                                            handler=server_prefix,
-                                           cert_file=cert_file, key_file=key_file,
+                                           cert_file='/etc/rhsm/ca/candlepin-local.pem',
+                                           key_file=key_file,
                                            proxy_hostname=proxy_hostname,
                                            proxy_port=proxy_port,
                                            proxy_user=proxy_user,
@@ -44,6 +45,7 @@ class CandlepinTest():
         consumerfacts = facts or {}
 
         logging.info('Registering consumer\n')
+        #curl -k -u admin:admin https://katello-test-el6.usersys.redhat.com/katello//api/organizations/foobar/environments|json_reformat
         self.cp.registerConsumer(name=consumername,
                                  type=consumertype,
                                  facts=consumerfacts,
@@ -54,3 +56,4 @@ class CandlepinTest():
 
     def subscribe(self):
         logging.info('Subscribing consumer\n')
+        #self.cp.bind()
